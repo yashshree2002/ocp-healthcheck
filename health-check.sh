@@ -46,11 +46,31 @@ echo
 echo
 echo "===== CGroup Configuration ====="
 omc get nodes.config -oyaml | grep -i cgroup
+
+echo "===CGroup Mode Check Information" 
+echo 'To check current cgroup mode, run the following command:'
+echo
+echo 'for NODE in \$(oc get nodes -o name); do'
+echo ' echo \"------ \${NODE} ------\"' 
+echo ' oc debug \${NODE} -q -- chroot /host bash -c \"stat -c %T -f /sys/fs/cgroup\"' 
+echo ' echo' 
+echo 'done' 
 echo
 
-echo "CGroup Mode Check" \ "echo 'To check current cgroup mode:' && \ echo && \ echo 'Reference:' && \ echo 'https://docs.redhat.com/en/documentation/openshift_container_platform/4.18/html/nodes/working-with-clusters#nodes-clusters-cgroups-2_nodes-cluster-cgroups-2' && \ echo 'https://access.redhat.com/solutions/7071862' && \ echo && \ echo 'Checking cgroup mode on all nodes...' && \ echo && \ for NODE in \$(oc get nodes -o name); do \ echo '------' \$NODE '------'; \ oc debug \$NODE -q -- chroot /host bash -c 'stat -c %T -f /sys/fs/cgroup'; \ echo; \ done && \ echo 'If output is cgroup2fs --> cgroup v2' && \ echo 'If output is tmpfs --> cgroup v1'"
+echo 'Alternative manual method:' 
+echo 'oc debug node/<node-name>'
+echo 'chroot /host' 
+echo 'stat -fc %T /sys/fs/cgroup/' 
+echo 
 
-read -p "Press Enter to continue..."
+echo 'Interpretation:' 
+echo 'cgroup2fs --> cgroup v2' 
+echo 'tmpfs --> cgroup v1' 
+echo
+
+echo 'Reference Documentation:' 
+echo '1. https://docs.redhat.com/en/documentation/openshift_container_platform/4.18/html/nodes/working-with-clusters#nodes-clusters-cgroups-2_nodes-cluster-cgroups-2' 
+echo '2. https://access.redhat.com/solutions/7071862' 
 
 echo
 echo "===== Non-Running Pods ====="
