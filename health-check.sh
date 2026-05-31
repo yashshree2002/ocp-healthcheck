@@ -33,15 +33,15 @@ read -p "Press Enter to continue..."
 echo
 echo "===== Installed Operators ====="
 omc get operators
-echo "Check the compatibility of the operators and upgrade the operators first, then upgrade the cluster:" echo "https://access.redhat.com/labs/ocpouic/?upgrade_path" 
 echo
-read -p "Press Enter to continue..."
+echo "Check the compatibility of the operators and upgrade the operators first, then upgrade the cluster:"
+echo "https://access.redhat.com/labs/ocpouic/?upgrade_path" 
+echo
 
 echo
 echo "===== Network Type ====="
 omc get network -oyaml | grep -i networkType
 echo
-read -p "Press Enter to continue..."
 
 echo
 echo "===== CGroup Configuration ====="
