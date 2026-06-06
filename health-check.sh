@@ -21,14 +21,13 @@ read -p "Press Enter to continue..."
 echo
 echo "===== Cluster Operator Upgradeable Status ====="
 echo
-printf "%-30s %-12s %-25s %s\n" "NAME" "UPGRADEABLE" "REASON" "MESSAGE"
 
-for co in $(omc get co -o name)
+printf "%-30s %-15s\n" "NAME" "UPGRADEABLE"
+
+for co in $(omc get co -o jsonpath='{.items[*].metadata.name}')
 do
-  omc get $co -o jsonpath='{.metadata.name}{"|"}{.status.conditions[?(@.type=="Upgradeable")].status}{"|"}{.status.conditions[?(@.type=="Upgradeable")].reason}{"|"}{.status.conditions[?(@.type=="Upgradeable")].message}{"\n"}'
-done | while IFS='|' read -r name status reason message
-do
-  printf "%-30s %-12s %-25s %s\n" "$name" "$status" "$reason" "$message"
+    status=$(omc get co "$co" -o jsonpath='{.status.conditions[?(@.type=="Upgradeable")].status}')
+    printf "%-30s %-15s\n" "$co" "${status:-N/A}"
 done
 
 echo
